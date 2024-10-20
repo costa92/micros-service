@@ -1,0 +1,79 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: PayService API
+    version: 0.0.1
+paths:
+    /v1/pay:
+        post:
+            tags:
+                - PayService
+            operationId: PayService_Pay
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/pay_server.v1.PayRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/pay_server.v1.PayResponse'
+    /v1/pay/{orderId}:
+        get:
+            tags:
+                - PayService
+            operationId: PayService_Detail
+            parameters:
+                - name: orderId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/pay_server.v1.DetailResponse'
+components:
+    schemas:
+        pay_server.v1.DetailResponse:
+            type: object
+            properties:
+                orderId:
+                    type: string
+                userId:
+                    type: string
+                amount:
+                    type: string
+                status:
+                    type: string
+        pay_server.v1.PayRequest:
+            type: object
+            properties:
+                orderId:
+                    type: string
+                userId:
+                    type: string
+                amount:
+                    type: string
+        pay_server.v1.PayResponse:
+            type: object
+            properties:
+                orderId:
+                    type: string
+                userId:
+                    type: string
+                amount:
+                    type: string
+                status:
+                    type: string
+tags:
+    - name: PayService
