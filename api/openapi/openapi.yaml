@@ -3,9 +3,45 @@
 
 openapi: 3.0.3
 info:
-    title: PayService API
+    title: ""
     version: 0.0.1
 paths:
+    /v1/order:
+        post:
+            tags:
+                - OrderService
+            operationId: OrderService_CreateOrder
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/order_server.v1.CreateOrderRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/order_server.v1.CreateOrderResponse'
+    /v1/order/{orderId}:
+        get:
+            tags:
+                - OrderService
+            operationId: OrderService_Detail
+            parameters:
+                - name: orderId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/order_server.v1.DetailResponse'
     /v1/pay:
         post:
             tags:
@@ -44,6 +80,35 @@ paths:
                                 $ref: '#/components/schemas/pay_server.v1.DetailResponse'
 components:
     schemas:
+        order_server.v1.CreateOrderRequest:
+            type: object
+            properties:
+                userId:
+                    type: string
+                amount:
+                    type: string
+        order_server.v1.CreateOrderResponse:
+            type: object
+            properties:
+                orderId:
+                    type: string
+                userId:
+                    type: string
+                amount:
+                    type: string
+                status:
+                    type: string
+        order_server.v1.DetailResponse:
+            type: object
+            properties:
+                orderId:
+                    type: string
+                userId:
+                    type: string
+                amount:
+                    type: string
+                status:
+                    type: string
         pay_server.v1.DetailResponse:
             type: object
             properties:
@@ -76,4 +141,5 @@ components:
                 status:
                     type: string
 tags:
+    - name: OrderService
     - name: PayService

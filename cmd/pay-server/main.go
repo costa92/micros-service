@@ -5,7 +5,7 @@ import (
 	// Adjust the import path as necessary
 	"context"
 
-	payserver "github.com/costa92/micros-service/internal/pay-server/service"
+	payserver "github.com/costa92/micros-service/internal/pay-server/server"
 	v1 "github.com/costa92/micros-service/pkg/api/pay-server/v1"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"

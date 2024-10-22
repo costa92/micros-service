@@ -30,7 +30,7 @@ type PayServiceHTTPServer interface {
 func RegisterPayServiceHTTPServer(s *http.Server, srv PayServiceHTTPServer) {
 	r := s.Route("/")
 	r.POST("/v1/pay", _PayService_Pay0_HTTP_Handler(srv))
-	r.GET("/v1/pay/{order_id}", _PayService_Detail0_HTTP_Handler(srv))
+	r.GET("/v1/pay/{order_id}", _PayService_Detail1_HTTP_Handler(srv))
 }
 
 func _PayService_Pay0_HTTP_Handler(srv PayServiceHTTPServer) func(ctx http.Context) error {
@@ -52,7 +52,7 @@ func _PayService_Pay0_HTTP_Handler(srv PayServiceHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _PayService_Detail0_HTTP_Handler(srv PayServiceHTTPServer) func(ctx http.Context) error {
+func _PayService_Detail1_HTTP_Handler(srv PayServiceHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DetailRequest
 		if err := ctx.BindQuery(&in); err != nil {

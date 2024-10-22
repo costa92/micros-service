@@ -55,7 +55,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1DetailResponse"
+              "$ref": "#/definitions/pay_serverv1DetailResponse"
             }
           },
           "default": {
@@ -80,6 +80,23 @@
     }
   },
   "definitions": {
+    "pay_serverv1DetailResponse": {
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -105,23 +122,6 @@
             "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
-        }
-      }
-    },
-    "v1DetailResponse": {
-      "type": "object",
-      "properties": {
-        "order_id": {
-          "type": "string"
-        },
-        "user_id": {
-          "type": "string"
-        },
-        "amount": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
         }
       }
     },
