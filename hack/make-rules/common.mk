@@ -11,7 +11,8 @@ ROOT_DIR :=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 endif
 
 APIROOT := $(ROOT_DIR)/pkg/api
-
+MANIFESTS_DIR=$(ROOT_DIR)/manifests
+SCRIPTS_DIR=$(ROOT_DIR)/hack
 
 # It's necessary to set this because some environments don't link sh -> bash.
 # zh 有些环境不会将sh链接到bash，所以需要设置这个变量, 用于指定shell的路径
@@ -22,15 +23,13 @@ SHELL := /usr/bin/env bash -o errexit -o pipefail +o nounset
 # zh: 为bash shell设置errexit标志是必要的
 export SHELLOPTS := errexit
 
-
-
 # zh: 用于将逗号分隔的字符串转换为空格分隔的字符串
 COMMA := ,
 SPACE :=
 SPACE +=
 
 
-# ===========
+# ==============================================================================
 # golang
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
@@ -41,6 +40,7 @@ else
 GOBIN=$(shell go env GOBIN)
 endif
 # ==============================================================================
+
 
 # =====================================================
 # Makefile settings
