@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+
+package order_server.v1;
+
+
+option go_package = "github.com/costa92/micros-service/pkg/api/order-server/v1";
+
+
+import "google/api/annotations.proto"; // Ensure this file is available in your proto include path
+
+service OrderService {
+    rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse) {
+        option (google.api.http) = {
+            post: "/v1/order"
+            body: "*"
+        };
+    }
+    rpc Detail(DetailRequest) returns (DetailResponse) {
+        option (google.api.http) = {
+            get: "/v1/order/{order_id}"
+        };
+    }
+}
+
+message CreateOrderRequest {
+    string user_id = 1;
+    string amount = 2;
+}
+
+
+message CreateOrderResponse {
+    string order_id = 1;
+    string user_id = 2;
+    string amount = 3;
+    string status = 4;
+}
+
+
+message DetailRequest {
+    string order_id = 1;
+}
+
+message DetailResponse {
+    string order_id = 1;
+    string user_id = 2;
+    string amount = 3;
+    string status = 4;
+}
