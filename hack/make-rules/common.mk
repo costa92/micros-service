@@ -23,11 +23,46 @@ SHELL := /usr/bin/env bash -o errexit -o pipefail +o nounset
 # zh: 为bash shell设置errexit标志是必要的
 export SHELLOPTS := errexit
 
+# ==============================================================================
+# Build options
+#
+PRJ_SRC_PATH :=github.com/costa92/micros-service
+
 # zh: 用于将逗号分隔的字符串转换为空格分隔的字符串
 COMMA := ,
 SPACE :=
 SPACE +=
 
+# zh: 用于指定输出目录和相关子目录
+ifeq ($(origin OUTPUT_DIR),undefined)
+OUTPUT_DIR := $(ROOT_DIR)/_output
+$(shell mkdir -p $(OUTPUT_DIR))
+endif
+
+ifeq ($(origin LOCALBIN),undefined)
+LOCALBIN := $(OUTPUT_DIR)/bin
+$(shell mkdir -p $(LOCALBIN))
+endif
+
+ifeq ($(origin TOOLS_DIR),undefined)
+TOOLS_DIR := $(OUTPUT_DIR)/tools
+$(shell mkdir -p $(TOOLS_DIR))
+endif
+
+ifeq ($(origin TMP_DIR),undefined)
+TMP_DIR := $(OUTPUT_DIR)/tmp
+$(shell mkdir -p $(TMP_DIR))
+endif
+
+# set the version number. you should not need to do this
+# for the majority of scenarios.
+ifeq ($(origin VERSION), undefined)
+# Current version of the project.
+  VERSION := $(shell git describe --tags --always --match='v*')
+  ifneq (,$(shell git status --porcelain 2>/dev/null))
+    VERSION := $(VERSION)-dirty
+  endif
+endif
 
 # ==============================================================================
 # golang
@@ -39,10 +74,13 @@ GOBIN=$(shell go env GOPATH)/bin
 else
 GOBIN=$(shell go env GOBIN)
 endif
+
+# The OS must be linux when building docker images
+# PLATFORMS ?= linux_amd64 linux_arm64
+# The OS can be linux/windows/darwin when building binaries
+PLATFORMS ?= darwin_amd64 windows_amd64 linux_amd64 linux_arm64
+
 # ==============================================================================
-
-
-# =====================================================
 # Makefile settings
 #
 # We don't need make's built-in rules.

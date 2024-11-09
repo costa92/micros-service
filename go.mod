@@ -7,6 +7,7 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20241015192408-796eee8c2d53
 	google.golang.org/grpc v1.67.1
 	google.golang.org/protobuf v1.35.1
+	gorm.io/driver/mysql v1.5.7
 )
 
 require (
@@ -17,7 +18,6 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	golang.org/x/net v0.28.0 // indirect
-	gorm.io/driver/mysql v1.5.7 // indirect
 )
 
 require (

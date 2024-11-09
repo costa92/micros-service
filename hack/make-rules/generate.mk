@@ -5,9 +5,6 @@
 # Generate go source files from protobuf files.
 .PHONY: gen.protoc
 gen.protoc: ## Generate go source files from protobuf files.
-
-.PHONY: gen.protoc
-gen.protoc: ## Generate go source files from protobuf files.
 	@protoc \
 		--proto_path=$(APIROOT) \
 		--proto_path=$(APISROOT) \

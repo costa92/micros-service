@@ -7,9 +7,12 @@ package main
 
 import (
 	"context"
+	httpNet "net/http"
+	"time"
 
 	orderServer "github.com/costa92/micros-service/internal/order-server/server"
 	v1 "github.com/costa92/micros-service/pkg/api/order-server/v1"
+	"github.com/go-kratos/kratos/v2/encoding"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
 )
@@ -29,6 +32,31 @@ func main() {
 		http.Middleware(),
 		http.Address(":8080"),
 	}
+	httpOpts = append(httpOpts, http.ResponseEncoder(func(
+		w httpNet.ResponseWriter,
+		r *httpNet.Request,
+		i interface{},
+	) error {
+		type response struct {
+			Code int         `json:"code"`
+			Data interface{} `json:"data"`
+			Ts   string      `json:"ts"`
+		}
+		reply := &response{
+			Code: 200,
+			Data: i,
+			Ts:   time.Now().Local().Format(time.DateTime),
+		}
+		codec := encoding.GetCodec("json")
+		data, err := codec.Marshal(reply)
+		if err != nil {
+			return err
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(data)
+		return nil
+	}))
+
 	httpSrv := http.NewServer(httpOpts...)
 	v1.RegisterOrderServiceHTTPServer(httpSrv, orderService)
 
