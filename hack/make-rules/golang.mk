@@ -1,6 +1,5 @@
 
 GO := go
-
 # Minimum supported go version.
 GO_MINIMUM_VERSION ?= 1.23
 
