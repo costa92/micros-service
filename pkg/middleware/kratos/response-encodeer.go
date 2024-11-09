@@ -6,6 +6,7 @@
 package kratos_middleware
 
 import (
+	"errors"
 	httpNet "net/http"
 	"time"
 
@@ -13,10 +14,13 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
+var ErrUnknownCodec = errors.New("codec not supported")
+
 type response struct {
-	Code int         `json:"code"`
-	Data interface{} `json:"data"`
-	Ts   string      `json:"ts"`
+	Code    int         `json:"code"`
+	Data    interface{} `json:"data"`
+	Message string      `json:"message"`
+	Ts      string      `json:"ts"`
 }
 
 func ResponseEncoder() http.ServerOption {
@@ -26,15 +30,18 @@ func ResponseEncoder() http.ServerOption {
 		reply := &response{
 			Code: 200,
 			Data: i,
-			Ts:   time.Now().Local().Format(time.DateTime),
+			Ts:   time.Now().Local().Format(time.RFC3339), // 使用更标准的时间格式
 		}
 		codec := encoding.GetCodec("json")
+		if codec == nil {
+			return ErrUnknownCodec
+		}
 		data, err := codec.Marshal(reply)
 		if err != nil {
 			return err
 		}
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(data)
-		return nil
+		w.Header().Set("Content-Type", "application/json; charset=utf-8") // 明确指定字符集
+		_, err = w.Write(data)
+		return err
 	})
 }
