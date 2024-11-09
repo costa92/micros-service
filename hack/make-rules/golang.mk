@@ -47,11 +47,11 @@ go.build.%: ## Build specified applications with platform, os and arch.
 
 #  go.build: $(addprefix go.build., $(addprefix $(PLATFORM)., $(BINS))) ## Build all applications.
 .PHONY: go.build # make go.build PLATFORM=linux BINS=order-server 
-go.build: $(addprefix go.build., $(addprefix $(PLATFORM)., $(BINS))) ## Build all applications.
+go.build: $(addprefix go.build., $(addprefix $(PLATFORM)., $(BINS))) ## make go.build PLATFORM=linux BINS=order-server 
 
 .PHONY: go.build.multiarch
 go.build.multiarch: $(foreach p,$(PLATFORMS),$(addprefix go.build., $(addprefix $(p)., $(BINS)))) ## Build all applications with all supported arch.
 
 # 编译当前环境下的CURRENT_PLATFORM 和 CURRENT_OS
 .PHONY: go.build.current
-go.build.current: $(addprefix go.build., $(addprefix $(CURRENT_PLATFORM)., $(BINS))) ## Build all applications with current platform.
+go.build.current: $(addprefix go.build., $(addprefix $(CURRENT_PLATFORM)., $(BINS))) ## Build all applications with current platform. eg: make go.build.current BINS=order-server 
