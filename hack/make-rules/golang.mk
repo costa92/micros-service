@@ -51,4 +51,7 @@ go.build: $(addprefix go.build., $(addprefix $(PLATFORM)., $(BINS))) ## Build al
 
 .PHONY: go.build.multiarch
 go.build.multiarch: $(foreach p,$(PLATFORMS),$(addprefix go.build., $(addprefix $(p)., $(BINS)))) ## Build all applications with all supported arch.
-	
+
+# 编译当前环境下的CURRENT_PLATFORM 和 CURRENT_OS
+.PHONY: go.build.current
+go.build.current: $(addprefix go.build., $(addprefix $(CURRENT_PLATFORM)., $(BINS))) ## Build all applications with current platform.

@@ -80,6 +80,20 @@ endif
 # The OS can be linux/windows/darwin when building binaries
 PLATFORMS ?= darwin_amd64 windows_amd64 linux_amd64 linux_arm64
 
+#  获取当前的操作系统
+ifeq ($(OS),Windows_NT)
+	CURRENT_PLATFORM := windows_$(shell uname -m)
+else
+	UNAME_S := $(shell uname -s)
+	UNAME_M := $(shell uname -m)
+	ifeq ($(UNAME_S),Linux)
+		CURRENT_PLATFORM := linux_$(UNAME_M)
+	endif
+	ifeq ($(UNAME_S),Darwin)
+		CURRENT_PLATFORM := darwin_$(UNAME_M)
+	endif
+endif
+
 # ==============================================================================
 # Makefile settings
 #
