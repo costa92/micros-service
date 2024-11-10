@@ -32,3 +32,8 @@ _install.go-mod-outdated: ## 安装 go-mod-outdated 工具
 # 判断 GO_MOD_OUTDATED_VERSION 是否为空，如果
 	$(eval GO_MOD_OUTDATED_VERSION := $(if $(strip $(GO_MOD_OUTDATED_VERSION)),$(strip $(GO_MOD_OUTDATED_VERSION)),latest))
 	@$(GO) install github.com/psampaz/go-mod-outdated@$(GO_MOD_OUTDATED_VERSION)
+
+# 安装 go-swagger 工具的目标规则
+.PHONY: _install.swagger
+_install.swagger:
+	@$(GO) install github.com/go-swagger/go-swagger/cmd/swagger@$(GO_SWAGGER_VERSION)

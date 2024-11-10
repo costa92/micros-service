@@ -10,6 +10,9 @@ ifeq ($(origin ROOT_DIR),undefined)
 ROOT_DIR :=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 endif
 
+include $(ROOT_DIR)/hack/make-rules/common-versions.mk
+
+
 APIROOT := $(ROOT_DIR)/pkg/api
 MANIFESTS_DIR=$(ROOT_DIR)/manifests
 SCRIPTS_DIR=$(ROOT_DIR)/hack
