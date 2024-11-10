@@ -25,7 +25,11 @@ func (s *OrderService) CreateOrder(ctx context.Context, req *v1.CreateOrderReque
 
 func (s *OrderService) Detail(ctx context.Context, req *v1.DetailRequest) (*v1.DetailResponse, error) {
 	if req.OrderId == "11" {
-		return nil, v1.IsOrderNotFound("order not found")
+		return nil, v1.ErrorOrderNotFound("order not found")
+	}
+
+	if req.OrderId == "22" {
+		return nil, v1.ErrorOrderAlreadyExists("order already exists")
 	}
 	return &v1.DetailResponse{
 		OrderId: req.OrderId,
