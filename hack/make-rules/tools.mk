@@ -37,3 +37,8 @@ _install.go-mod-outdated: ## 安装 go-mod-outdated 工具
 .PHONY: _install.swagger
 _install.swagger:
 	@$(GO) install github.com/go-swagger/go-swagger/cmd/swagger@$(GO_SWAGGER_VERSION)
+
+# 安装 yq 工具的目标规则
+.PHONY: _install.yq
+_install.yq:
+	@$(GO) install github.com/mikefarah/yq/v4@$(YQ_VERSION)

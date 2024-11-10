@@ -9,10 +9,6 @@ include hack/make-rules/all.mk
 ## --------------------------------------
 
 ##@ Generate
-
-.PHONY: gen
-
-
 .PHONY: protoc
 protoc: ## Generate api proto files.
 	$(MAKE) gen.protoc
@@ -26,6 +22,21 @@ build: tidy ## Build the operator.
 .PHONY: tidy
 tidy:
 	@$(GO) mod tidy
+
+
+
+.PHONY: add-copyright
+add-copyright: ## Ensures source code files have copyright license headers.
+	$(MAKE) copyright.add
+
+.PHONY: swagger
+#swagger: gen.protoc
+swagger: ## Generate and aggregate swagger document.
+	@$(MAKE) swagger.run
+
+.PHONY: swagger.serve
+serve-swagger: ## Serve swagger spec and docs at 65534.
+	@$(MAKE) swagger.serve
 
 
 .PHONY: targets
