@@ -54,3 +54,7 @@ go.build.multiarch: $(foreach p,$(PLATFORMS),$(addprefix go.build., $(addprefix 
 # 编译当前环境下的CURRENT_PLATFORM 和 CURRENT_OS
 .PHONY: go.build.current
 go.build.current: $(addprefix go.build., $(addprefix $(CURRENT_PLATFORM)., $(BINS))) ## Build all applications with current platform. eg: make go.build.current BINS=order-server 
+
+.PHONY: go.updates 
+go.updates: tools.verify.go-mod-outdated ## Find outdated dependencies.
+	@$(GO) list -u -m -json all | go-mod-outdated -update -direct
