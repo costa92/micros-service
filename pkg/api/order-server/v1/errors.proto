@@ -15,4 +15,10 @@ enum ErrorReason {
   OrderAlreadyExists = 1 [(errors.code) = 409];
   // 创建订单失败，可能是由于服务器或其他问题导致的创建过程中的错误
   OrderCreateFailed = 2 [(errors.code) = 541];
+
+  // 订单状态已经是完成状态，无法再次修改
+  OrderStatusCompleted = 3 [(errors.code) = 400];
+
+  // 订单状态已经支付，无法再次支付
+  OrderStatusPaid = 4 [(errors.code) = 400];
 }

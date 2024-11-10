@@ -25,6 +25,8 @@
 | OrderNotFound | 404 |  订单找不到 ，可能是订单不存在或输入的订单标识有误 |
 | OrderAlreadyExists | 409 |  订单已存在，无法创建用户 |
 | OrderCreateFailed | 541 |  创建订单失败，可能是由于服务器或其他问题导致的创建过程中的错误 |
+| OrderStatusCompleted | 400 |  订单状态已经是完成状态，无法再次修改 |
+| OrderStatusPaid | 400 |  订单状态已经支付，无法再次支付 |
 
 ## 参考
 

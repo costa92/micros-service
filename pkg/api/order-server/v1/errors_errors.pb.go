@@ -52,3 +52,31 @@ func IsOrderCreateFailed(err error) bool {
 func ErrorOrderCreateFailed(format string, args ...interface{}) *errors.Error {
 	return errors.New(541, ErrorReason_OrderCreateFailed.String(), fmt.Sprintf(format, args...))
 }
+
+// 订单状态已经是完成状态，无法再次修改
+func IsOrderStatusCompleted(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_OrderStatusCompleted.String() && e.Code == 400
+}
+
+// 订单状态已经是完成状态，无法再次修改
+func ErrorOrderStatusCompleted(format string, args ...interface{}) *errors.Error {
+	return errors.New(400, ErrorReason_OrderStatusCompleted.String(), fmt.Sprintf(format, args...))
+}
+
+// 订单状态已经支付，无法再次支付
+func IsOrderStatusPaid(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_OrderStatusPaid.String() && e.Code == 400
+}
+
+// 订单状态已经支付，无法再次支付
+func ErrorOrderStatusPaid(format string, args ...interface{}) *errors.Error {
+	return errors.New(400, ErrorReason_OrderStatusPaid.String(), fmt.Sprintf(format, args...))
+}
