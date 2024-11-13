@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.5.3
 // - protoc             v5.28.3
-// source: pay-server/v1/pay-service.proto
+// source: pay-server/v1/pay-serve.proto
 
 package v1
 
@@ -19,27 +19,27 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationPayServiceDetail = "/pay_server.v1.PayService/Detail"
-const OperationPayServicePay = "/pay_server.v1.PayService/Pay"
+const OperationPayServerDetail = "/pay_server.v1.PayServer/Detail"
+const OperationPayServerPay = "/pay_server.v1.PayServer/Pay"
 
-type PayServiceHTTPServer interface {
+type PayServerHTTPServer interface {
 	Detail(context.Context, *DetailRequest) (*DetailResponse, error)
 	Pay(context.Context, *PayRequest) (*PayResponse, error)
 }
 
-func RegisterPayServiceHTTPServer(s *http.Server, srv PayServiceHTTPServer) {
+func RegisterPayServerHTTPServer(s *http.Server, srv PayServerHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/pay", _PayService_Pay0_HTTP_Handler(srv))
-	r.GET("/v1/pay/{order_id}", _PayService_Detail1_HTTP_Handler(srv))
+	r.POST("/v1/pay", _PayServer_Pay0_HTTP_Handler(srv))
+	r.GET("/v1/pay/{order_id}", _PayServer_Detail1_HTTP_Handler(srv))
 }
 
-func _PayService_Pay0_HTTP_Handler(srv PayServiceHTTPServer) func(ctx http.Context) error {
+func _PayServer_Pay0_HTTP_Handler(srv PayServerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in PayRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationPayServicePay)
+		http.SetOperation(ctx, OperationPayServerPay)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Pay(ctx, req.(*PayRequest))
 		})
@@ -52,7 +52,7 @@ func _PayService_Pay0_HTTP_Handler(srv PayServiceHTTPServer) func(ctx http.Conte
 	}
 }
 
-func _PayService_Detail1_HTTP_Handler(srv PayServiceHTTPServer) func(ctx http.Context) error {
+func _PayServer_Detail1_HTTP_Handler(srv PayServerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DetailRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -61,7 +61,7 @@ func _PayService_Detail1_HTTP_Handler(srv PayServiceHTTPServer) func(ctx http.Co
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationPayServiceDetail)
+		http.SetOperation(ctx, OperationPayServerDetail)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Detail(ctx, req.(*DetailRequest))
 		})
@@ -74,24 +74,24 @@ func _PayService_Detail1_HTTP_Handler(srv PayServiceHTTPServer) func(ctx http.Co
 	}
 }
 
-type PayServiceHTTPClient interface {
+type PayServerHTTPClient interface {
 	Detail(ctx context.Context, req *DetailRequest, opts ...http.CallOption) (rsp *DetailResponse, err error)
 	Pay(ctx context.Context, req *PayRequest, opts ...http.CallOption) (rsp *PayResponse, err error)
 }
 
-type PayServiceHTTPClientImpl struct {
+type PayServerHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewPayServiceHTTPClient(client *http.Client) PayServiceHTTPClient {
-	return &PayServiceHTTPClientImpl{client}
+func NewPayServerHTTPClient(client *http.Client) PayServerHTTPClient {
+	return &PayServerHTTPClientImpl{client}
 }
 
-func (c *PayServiceHTTPClientImpl) Detail(ctx context.Context, in *DetailRequest, opts ...http.CallOption) (*DetailResponse, error) {
+func (c *PayServerHTTPClientImpl) Detail(ctx context.Context, in *DetailRequest, opts ...http.CallOption) (*DetailResponse, error) {
 	var out DetailResponse
 	pattern := "/v1/pay/{order_id}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationPayServiceDetail))
+	opts = append(opts, http.Operation(OperationPayServerDetail))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -100,11 +100,11 @@ func (c *PayServiceHTTPClientImpl) Detail(ctx context.Context, in *DetailRequest
 	return &out, err
 }
 
-func (c *PayServiceHTTPClientImpl) Pay(ctx context.Context, in *PayRequest, opts ...http.CallOption) (*PayResponse, error) {
+func (c *PayServerHTTPClientImpl) Pay(ctx context.Context, in *PayRequest, opts ...http.CallOption) (*PayResponse, error) {
 	var out PayResponse
 	pattern := "/v1/pay"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationPayServicePay))
+	opts = append(opts, http.Operation(OperationPayServerPay))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {

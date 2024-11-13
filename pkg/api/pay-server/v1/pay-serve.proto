@@ -11,7 +11,7 @@ option go_package = "github.com/costa92/micros-service/pkg/pay-server/api/pay-se
 
 import "google/api/annotations.proto"; // Ensure this file is available in your proto include path
 
-service PayService {
+service PayServer {
     rpc Pay(PayRequest) returns (PayResponse) {
         option (google.api.http) = {
             post: "/v1/pay"

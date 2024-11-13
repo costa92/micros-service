@@ -23,7 +23,7 @@ func main() {
 	srv := grpc.NewServer(opts...)
 	orderService := orderServer.NewOrderService()
 	// Register gRPC server endpoint
-	v1.RegisterOrderServiceServer(srv, orderService)
+	v1.RegisterOrderServerServer(srv, orderService)
 
 	// Register http server endpoint
 	httpOpts := []http.ServerOption{
@@ -33,7 +33,7 @@ func main() {
 	httpOpts = append(httpOpts, kratos_middleware.ResponseEncoder())
 
 	httpSrv := http.NewServer(httpOpts...)
-	v1.RegisterOrderServiceHTTPServer(httpSrv, orderService)
+	v1.RegisterOrderServerHTTPServer(httpSrv, orderService)
 
 	// Run both servers in parallel
 	ctx := context.Background()
@@ -45,6 +45,7 @@ func main() {
 			panic(err)
 		}
 	}()
+
 	go func() {
 		if err := httpSrv.Start(ctx); err != nil {
 			panic(err)

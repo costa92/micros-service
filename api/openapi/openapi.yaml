@@ -9,8 +9,8 @@ paths:
     /v1/order:
         post:
             tags:
-                - OrderService
-            operationId: OrderService_CreateOrder
+                - OrderServer
+            operationId: OrderServer_CreateOrder
             requestBody:
                 content:
                     application/json:
@@ -27,8 +27,8 @@ paths:
     /v1/order/{orderId}:
         get:
             tags:
-                - OrderService
-            operationId: OrderService_Detail
+                - OrderServer
+            operationId: OrderServer_Detail
             parameters:
                 - name: orderId
                   in: path
@@ -45,8 +45,8 @@ paths:
     /v1/pay:
         post:
             tags:
-                - PayService
-            operationId: PayService_Pay
+                - PayServer
+            operationId: PayServer_Pay
             requestBody:
                 content:
                     application/json:
@@ -63,8 +63,8 @@ paths:
     /v1/pay/{orderId}:
         get:
             tags:
-                - PayService
-            operationId: PayService_Detail
+                - PayServer
+            operationId: PayServer_Detail
             parameters:
                 - name: orderId
                   in: path
@@ -141,5 +141,5 @@ components:
                 status:
                     type: string
 tags:
-    - name: OrderService
-    - name: PayService
+    - name: OrderServer
+    - name: PayServer

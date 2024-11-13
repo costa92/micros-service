@@ -19,27 +19,27 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationOrderServiceCreateOrder = "/order_server.v1.OrderService/CreateOrder"
-const OperationOrderServiceDetail = "/order_server.v1.OrderService/Detail"
+const OperationOrderServerCreateOrder = "/order_server.v1.OrderServer/CreateOrder"
+const OperationOrderServerDetail = "/order_server.v1.OrderServer/Detail"
 
-type OrderServiceHTTPServer interface {
+type OrderServerHTTPServer interface {
 	CreateOrder(context.Context, *CreateOrderRequest) (*CreateOrderResponse, error)
 	Detail(context.Context, *DetailRequest) (*DetailResponse, error)
 }
 
-func RegisterOrderServiceHTTPServer(s *http.Server, srv OrderServiceHTTPServer) {
+func RegisterOrderServerHTTPServer(s *http.Server, srv OrderServerHTTPServer) {
 	r := s.Route("/")
-	r.POST("/v1/order", _OrderService_CreateOrder0_HTTP_Handler(srv))
-	r.GET("/v1/order/{order_id}", _OrderService_Detail0_HTTP_Handler(srv))
+	r.POST("/v1/order", _OrderServer_CreateOrder0_HTTP_Handler(srv))
+	r.GET("/v1/order/{order_id}", _OrderServer_Detail0_HTTP_Handler(srv))
 }
 
-func _OrderService_CreateOrder0_HTTP_Handler(srv OrderServiceHTTPServer) func(ctx http.Context) error {
+func _OrderServer_CreateOrder0_HTTP_Handler(srv OrderServerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in CreateOrderRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationOrderServiceCreateOrder)
+		http.SetOperation(ctx, OperationOrderServerCreateOrder)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.CreateOrder(ctx, req.(*CreateOrderRequest))
 		})
@@ -52,7 +52,7 @@ func _OrderService_CreateOrder0_HTTP_Handler(srv OrderServiceHTTPServer) func(ct
 	}
 }
 
-func _OrderService_Detail0_HTTP_Handler(srv OrderServiceHTTPServer) func(ctx http.Context) error {
+func _OrderServer_Detail0_HTTP_Handler(srv OrderServerHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in DetailRequest
 		if err := ctx.BindQuery(&in); err != nil {
@@ -61,7 +61,7 @@ func _OrderService_Detail0_HTTP_Handler(srv OrderServiceHTTPServer) func(ctx htt
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationOrderServiceDetail)
+		http.SetOperation(ctx, OperationOrderServerDetail)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
 			return srv.Detail(ctx, req.(*DetailRequest))
 		})
@@ -74,24 +74,24 @@ func _OrderService_Detail0_HTTP_Handler(srv OrderServiceHTTPServer) func(ctx htt
 	}
 }
 
-type OrderServiceHTTPClient interface {
+type OrderServerHTTPClient interface {
 	CreateOrder(ctx context.Context, req *CreateOrderRequest, opts ...http.CallOption) (rsp *CreateOrderResponse, err error)
 	Detail(ctx context.Context, req *DetailRequest, opts ...http.CallOption) (rsp *DetailResponse, err error)
 }
 
-type OrderServiceHTTPClientImpl struct {
+type OrderServerHTTPClientImpl struct {
 	cc *http.Client
 }
 
-func NewOrderServiceHTTPClient(client *http.Client) OrderServiceHTTPClient {
-	return &OrderServiceHTTPClientImpl{client}
+func NewOrderServerHTTPClient(client *http.Client) OrderServerHTTPClient {
+	return &OrderServerHTTPClientImpl{client}
 }
 
-func (c *OrderServiceHTTPClientImpl) CreateOrder(ctx context.Context, in *CreateOrderRequest, opts ...http.CallOption) (*CreateOrderResponse, error) {
+func (c *OrderServerHTTPClientImpl) CreateOrder(ctx context.Context, in *CreateOrderRequest, opts ...http.CallOption) (*CreateOrderResponse, error) {
 	var out CreateOrderResponse
 	pattern := "/v1/order"
 	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationOrderServiceCreateOrder))
+	opts = append(opts, http.Operation(OperationOrderServerCreateOrder))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
@@ -100,11 +100,11 @@ func (c *OrderServiceHTTPClientImpl) CreateOrder(ctx context.Context, in *Create
 	return &out, err
 }
 
-func (c *OrderServiceHTTPClientImpl) Detail(ctx context.Context, in *DetailRequest, opts ...http.CallOption) (*DetailResponse, error) {
+func (c *OrderServerHTTPClientImpl) Detail(ctx context.Context, in *DetailRequest, opts ...http.CallOption) (*DetailResponse, error) {
 	var out DetailResponse
 	pattern := "/v1/order/{order_id}"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationOrderServiceDetail))
+	opts = append(opts, http.Operation(OperationOrderServerDetail))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {

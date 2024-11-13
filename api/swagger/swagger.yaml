@@ -4,32 +4,12 @@ produces:
     - application/json
 swagger: "2.0"
 info:
-    title: order-server/v1/order-server.proto
+    title: order-server/v1/errors.proto
     version: version not set
 paths:
-    /pay:
-        post:
-            operationId: PayServer_Pay
-            parameters:
-                - in: body
-                  name: body
-                  required: true
-                  schema:
-                    $ref: '#/definitions/pay_serverPayRequest'
-            responses:
-                "200":
-                    description: A successful response.
-                    schema:
-                        $ref: '#/definitions/pay_serverPayResponse'
-                default:
-                    description: An unexpected error response.
-                    schema:
-                        $ref: '#/definitions/rpcStatus'
-            tags:
-                - PayServer
     /v1/order:
         post:
-            operationId: OrderService_CreateOrder
+            operationId: OrderServer_CreateOrder
             parameters:
                 - in: body
                   name: body
@@ -46,10 +26,10 @@ paths:
                     schema:
                         $ref: '#/definitions/rpcStatus'
             tags:
-                - OrderService
+                - OrderServer
     /v1/order/{order_id}:
         get:
-            operationId: OrderService_Detail
+            operationId: OrderServer_Detail
             parameters:
                 - in: path
                   name: order_id
@@ -65,10 +45,10 @@ paths:
                     schema:
                         $ref: '#/definitions/rpcStatus'
             tags:
-                - OrderService
+                - OrderServer
     /v1/pay:
         post:
-            operationId: PayService_Pay
+            operationId: PayServer_Pay
             parameters:
                 - in: body
                   name: body
@@ -85,10 +65,10 @@ paths:
                     schema:
                         $ref: '#/definitions/rpcStatus'
             tags:
-                - PayService
+                - PayServer
     /v1/pay/{order_id}:
         get:
-            operationId: PayService_Detail
+            operationId: PayServer_Detail
             parameters:
                 - in: path
                   name: order_id
@@ -104,20 +84,9 @@ paths:
                     schema:
                         $ref: '#/definitions/rpcStatus'
             tags:
-                - PayService
+                - PayServer
 definitions:
     order_serverv1DetailResponse:
-        properties:
-            amount:
-                type: string
-            order_id:
-                type: string
-            status:
-                type: string
-            user_id:
-                type: string
-        type: object
-    pay_serverPayRequest:
         properties:
             amount:
                 type: string
@@ -125,20 +94,12 @@ definitions:
             order_id:
                 type: string
                 x-order: !!float 0
+            status:
+                type: string
+                x-order: !!float 3
             user_id:
                 type: string
                 x-order: !!float 1
-        title: 定义请求
-        type: object
-    pay_serverPayResponse:
-        properties:
-            code:
-                type: string
-                x-order: !!float 0
-            message:
-                type: string
-                x-order: !!float 1
-        title: 定义响应
         type: object
     pay_serverv1DetailResponse:
         properties:
@@ -178,19 +139,25 @@ definitions:
         properties:
             amount:
                 type: string
+                x-order: !!float 1
             user_id:
                 type: string
+                x-order: !!float 0
         type: object
     v1CreateOrderResponse:
         properties:
             amount:
                 type: string
+                x-order: !!float 2
             order_id:
                 type: string
+                x-order: !!float 0
             status:
                 type: string
+                x-order: !!float 3
             user_id:
                 type: string
+                x-order: !!float 1
         type: object
     v1PayRequest:
         properties:
@@ -220,6 +187,5 @@ definitions:
                 x-order: !!float 1
         type: object
 tags:
-    - name: OrderService
-    - name: PayService
+    - name: OrderServer
     - name: PayServer

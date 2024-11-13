@@ -22,9 +22,9 @@ func main() {
 		grpc.Address(":9000"),
 	}
 	srv := grpc.NewServer(opts...)
-	payService := payserver.NewPayService()
+	payServer := payserver.NewPayServer()
 	// Register gRPC server endpoint
-	v1.RegisterPayServiceServer(srv, payService)
+	v1.RegisterPayServerServer(srv, payServer)
 
 	// Register http server endpoint
 	httpOpts := []http.ServerOption{
@@ -32,7 +32,7 @@ func main() {
 		http.Address(":8000"),
 	}
 	httpSrv := http.NewServer(httpOpts...)
-	v1.RegisterPayServiceHTTPServer(httpSrv, payService)
+	v1.RegisterPayServerHTTPServer(httpSrv, payServer)
 
 	// Run both servers in parallel
 	ctx := context.Background()

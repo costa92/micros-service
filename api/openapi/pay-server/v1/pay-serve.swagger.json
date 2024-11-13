@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "pay-server/pay-server.proto",
+    "title": "pay-server/v1/pay-serve.proto",
     "version": "version not set"
   },
   "tags": [
@@ -16,14 +16,14 @@
     "application/json"
   ],
   "paths": {
-    "/pay": {
+    "/v1/pay": {
       "post": {
         "operationId": "PayServer_Pay",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/pay_serverPayResponse"
+              "$ref": "#/definitions/v1PayResponse"
             }
           },
           "default": {
@@ -39,8 +39,38 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/pay_serverPayRequest"
+              "$ref": "#/definitions/v1PayRequest"
             }
+          }
+        ],
+        "tags": [
+          "PayServer"
+        ]
+      }
+    },
+    "/v1/pay/{order_id}": {
+      "get": {
+        "operationId": "PayServer_Detail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/pay_serverv1DetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
         ],
         "tags": [
@@ -50,7 +80,7 @@
     }
   },
   "definitions": {
-    "pay_serverPayRequest": {
+    "pay_serverv1DetailResponse": {
       "type": "object",
       "properties": {
         "order_id": {
@@ -61,21 +91,11 @@
         },
         "amount": {
           "type": "string"
-        }
-      },
-      "title": "定义请求"
-    },
-    "pay_serverPayResponse": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "string"
         },
-        "message": {
+        "status": {
           "type": "string"
         }
-      },
-      "title": "定义响应"
+      }
     },
     "protobufAny": {
       "type": "object",
@@ -102,6 +122,37 @@
             "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
+        }
+      }
+    },
+    "v1PayRequest": {
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "string"
+        }
+      }
+    },
+    "v1PayResponse": {
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
         }
       }
     }

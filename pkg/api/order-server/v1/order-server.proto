@@ -14,7 +14,7 @@ option go_package = "github.com/costa92/micros-service/pkg/api/order-server/v1";
 
 import "google/api/annotations.proto"; // Ensure this file is available in your proto include path
 
-service OrderService {
+service OrderServer {
     rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse) {
         option (google.api.http) = {
             post: "/v1/order"

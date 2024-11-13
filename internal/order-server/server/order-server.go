@@ -12,7 +12,7 @@ import (
 )
 
 type OrderService struct {
-	v1.UnimplementedOrderServiceServer
+	v1.UnimplementedOrderServerServer
 }
 
 func NewOrderService() *OrderService {
