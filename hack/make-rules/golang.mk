@@ -48,6 +48,7 @@ go.build.%: ## Build specified applications with platform, os and arch.
 .PHONY: go.build # make go.build PLATFORM=linux BINS=order-server 
 go.build: $(addprefix go.build., $(addprefix $(PLATFORM)., $(BINS))) ## make go.build PLATFORM=linux BINS=order-server 
 
+# 编译所有支持的平台
 .PHONY: go.build.multiarch
 go.build.multiarch: $(foreach p,$(PLATFORMS),$(addprefix go.build., $(addprefix $(p)., $(BINS)))) ## Build all applications with all supported arch.
 
@@ -55,6 +56,7 @@ go.build.multiarch: $(foreach p,$(PLATFORMS),$(addprefix go.build., $(addprefix 
 .PHONY: go.build.current
 go.build.current: $(addprefix go.build., $(addprefix $(CURRENT_PLATFORM)., $(BINS))) ## Build all applications with current platform. eg: make go.build.current BINS=order-server 
 
+# 编译所有支持的平台
 .PHONY: go.updates 
 go.updates: tools.verify.go-mod-outdated ## Find outdated dependencies.
 	@$(GO) list -u -m -json all | go-mod-outdated -update -direct

@@ -78,22 +78,20 @@ else
 GOBIN=$(shell go env GOBIN)
 endif
 
-# The OS must be linux when building docker images
-# PLATFORMS ?= linux_amd64 linux_arm64
-# The OS can be linux/windows/darwin when building binaries
+# 优化平台检测和设置
 PLATFORMS ?= darwin_amd64 windows_amd64 linux_amd64 linux_arm64
 
-#  获取当前的操作系统
+# 获取当前的操作系统并设置 CURRENT_PLATFORM
+CURRENT_PLATFORM := $(shell uname -s)_$(shell uname -m)
 ifeq ($(OS),Windows_NT)
 	CURRENT_PLATFORM := windows_$(shell uname -m)
 else
-	UNAME_S := $(shell uname -s)
-	UNAME_M := $(shell uname -m)
-	ifeq ($(UNAME_S),Linux)
-		CURRENT_PLATFORM := linux_$(UNAME_M)
-	endif
-	ifeq ($(UNAME_S),Darwin)
-		CURRENT_PLATFORM := darwin_$(UNAME_M)
+	ifeq ($(CURRENT_PLATFORM),Linux_x86_64)
+		CURRENT_PLATFORM := linux_amd64
+	else ifeq ($(CURRENT_PLATFORM),Linux_x64)
+		CURRENT_PLATFORM := linux_amd64
+	else ifeq ($(CURRENT_PLATFORM),Linux_AMD64)
+		CURRENT_PLATFORM := linux_amd64
 	endif
 endif
 
@@ -131,6 +129,11 @@ else
   # If we're not debugging the Makefile, don't echo recipes.]
   MAKEFLAGS += -s --no-print-directory
 endif
+
+
+# Image build releated variables.
+REGISTRY_PREFIX ?= ccr.ccs.tencentyun.com/project
+GENERATED_DOCKERFILE_DIR=$(ROOT_DIR)/build/docker
 
 # =====================================================
 FIND := find . ! -path './third_party/*' ! -path './vendor/*' ! -path './.git/*' ! -path './.idea/*' ! -path './_output/*'

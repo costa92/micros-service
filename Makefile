@@ -4,6 +4,18 @@
 include hack/make-rules/common.mk
 include hack/make-rules/all.mk
 
+# ==============================================================================
+# Usage
+define USAGE_OPTIONS
+
+\033[35mOptions:\033[0m
+
+  BINS             The binaries to build. Default is all of cmd.
+
+endef
+export USAGE_OPTIONS
+# ==============================================================================
+
 ## --------------------------------------
 ## Generate / Manifests
 ## --------------------------------------
@@ -17,17 +29,29 @@ protoc: ## Generate api proto files.
 ##@ Build
 .PHONY: build
 build: tidy ## Build the operator.
-	$(MAKE) gen.build
+	$(MAKE) go.build
+
+
+.PHONY: build.multiarch 
+build.multiarch: ## Build source code for multiple platforms. See option PLATFORMS. make build.multiarch PLATFORMS=linux/amd64,linux/arm64  BINS=order-server
+	$(MAKE) go.build.multiarch 
+
+
+
+.PHONY: build.image 
+build.image: ## Build docker image. 
+	$(MAKE) image.build
 
 .PHONY: tidy
 tidy:
 	@$(GO) mod tidy
 
 
-
+## add-copyright
 .PHONY: add-copyright
-add-copyright: ## Ensures source code files have copyright license headers.
+add-copyright: ## Ensures source code files have copyright license headers. 
 	$(MAKE) copyright.add
+
 
 .PHONY: swagger
 #swagger: gen.protoc
