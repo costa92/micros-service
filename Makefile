@@ -37,10 +37,22 @@ build.multiarch: ## Build source code for multiple platforms. See option PLATFOR
 	$(MAKE) go.build.multiarch 
 
 
-
+##@ Image
 .PHONY: build.image 
 build.image: ## Build docker image. 
 	$(MAKE) image.build
+
+
+.PHONY: image.multiarch
+image.multiarch: ## Build docker images for multiple platforms. See option PLATFORMS.
+	$(MAKE) image.build.multiarch
+
+
+.PHONY: push
+push: ## Build docker images for host arch and push images to registry.
+	$(MAKE) image.push
+
+
 
 .PHONY: tidy
 tidy:

@@ -114,3 +114,17 @@ endif
 		$(DOCKER) build $(BUILD_SUFFIX) ; \
 	fi
 	@-rm -rf $(TMP_DIR)/$(IMAGE)
+
+
+
+.PHONY: image.push
+image.push: image.verify go.build.verify $(addprefix image.push., $(addprefix $(IMAGE_PLAT)., $(IMAGES))) ## Build and push all docker images to docker registry.
+
+.PHONY: image.push.multiarch
+image.push.multiarch: image.verify go.build.verify $(foreach p,$(PLATFORMS),$(addprefix image.push., $(addprefix $(p)., $(IMAGES)))) ## Build and push all docker with supported arch to docker registry.
+
+.PHONY: image.push.%
+image.push.%: image.build.% ## Build and push specified docker image.
+	# NOTICE: The `IMAGE_TAG` variable is inherited from the `image.build.%` makefile rule.
+	@echo "===========> Pushing image $(IMAGE) $(IMAGE_TAG) to $(REGISTRY_PREFIX)"
+	$(DOCKER) push $(REGISTRY_PREFIX)/$(IMAGE)-$(ARCH):$(IMAGE_TAG)
