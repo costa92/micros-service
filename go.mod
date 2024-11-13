@@ -28,7 +28,7 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/redis/go-redis/v9 v9.7.0
 	golang.org/x/sys v0.24.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
+	golang.org/x/text v0.19.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241007155032-5fefd90f89a9 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/gorm v1.25.12
