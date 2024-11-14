@@ -120,9 +120,11 @@ endif
 .PHONY: image.push
 image.push: image.verify go.build.verify $(addprefix image.push., $(addprefix $(IMAGE_PLAT)., $(IMAGES))) ## Build and push all docker images to docker registry.
 
+#  Build and push specified docker image.
 .PHONY: image.push.multiarch
 image.push.multiarch: image.verify go.build.verify $(foreach p,$(PLATFORMS),$(addprefix image.push., $(addprefix $(p)., $(IMAGES)))) ## Build and push all docker with supported arch to docker registry.
 
+#  image 推送
 .PHONY: image.push.%
 image.push.%: image.build.% ## Build and push specified docker image.
 	# NOTICE: The `IMAGE_TAG` variable is inherited from the `image.build.%` makefile rule.
