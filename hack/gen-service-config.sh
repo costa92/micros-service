@@ -14,10 +14,10 @@ ENV_FILE=$2
 TEMPLATE_FILE=$3
 OUTPUT_DIR=$4
 
-echo TEMPLATE_FILE=${TEMPLATE_FILE}
-echo OUTPUT_DIR=${OUTPUT_DIR}
-echo ENV_FILE=${ENV_FILE}
-echo SERVICE_NAME=${SERVICE_NAME}
+# echo TEMPLATE_FILE=${TEMPLATE_FILE}
+# echo OUTPUT_DIR=${OUTPUT_DIR}
+# echo ENV_FILE=${ENV_FILE}
+# echo SERVICE_NAME=${SERVICE_NAME}
 
 if [ ! -d ${OUTPUT_DIR} ];then
   mkdir -p ${OUTPUT_DIR}
@@ -41,7 +41,7 @@ Documentation=https://github.com/superproj/onex/blob/master/manifests/installati
 WorkingDirectory=${INSTALL_DIR}
 ExecStartPre=/usr/bin/mkdir -p ${DATA_DIR}/onex-apiserver
 ExecStartPre=/usr/bin/mkdir -p ${LOG_DIR}
-ExecStart=/opt/onex/bin/onex-apiserver --bind-address=${ONEX_APISERVER_BIND_ADDRESS} --secure-port ${ONEX_APISERVER_SECURE_PORT} --etcd-servers ${ONEX_APISERVER_ETCD_SERVERS} --client-ca-file=${ONEX_APISERVER_CLIENT_CA_FILE} --tls-cert-file=${ONEX_APISERVER_TLS_CERT_FILE} --tls-private-key-file=${ONEX_APISERVER_TLS_PRIVATE_KEY_FILE} --v=${ONEX_APISERVER_V_LEVEL}
+ExecStart=/opt/project/bin/apiserver --bind-address=${ONEX_APISERVER_BIND_ADDRESS} --secure-port ${ONEX_APISERVER_SECURE_PORT} --etcd-servers ${ONEX_APISERVER_ETCD_SERVERS} --client-ca-file=${ONEX_APISERVER_CLIENT_CA_FILE} --tls-cert-file=${ONEX_APISERVER_TLS_CERT_FILE} --tls-private-key-file=${ONEX_APISERVER_TLS_PRIVATE_KEY_FILE} --v=${ONEX_APISERVER_V_LEVEL}
 Restart=always
 RestartSec=5
 StartLimitInterval=0
@@ -51,11 +51,11 @@ WantedBy=multi-user.target
 EOF
 }
 
-echo "ENV_FILE=${ENV_FILE}"
+# echo "ENV_FILE=${ENV_FILE}"
 
 source ${ENV_FILE}
 
-echo TEMPLATE_FILE=${TEMPLATE_FILE}
+# echo TEMPLATE_FILE=${TEMPLATE_FILE}
 
 # Some customized processing
 case ${TEMPLATE_FILE} in
@@ -68,7 +68,7 @@ case ${TEMPLATE_FILE} in
       exit 0
     fi
     ;;
-  *onex-apiserver.config.tmpl.yaml)
+  *apiserver.config.tmpl.yaml)
     exit 0
     ;;
   *)
@@ -76,13 +76,13 @@ case ${TEMPLATE_FILE} in
 esac
 
 
-#  生成配置文件
+#  生成配置文件,根据模板文件生成配置文件
 suffix=$(echo $TEMPLATE_FILE | awk -F'.' '{print $NF}')
 ${ROOT_DIR}/hack/gen-config.sh ${ENV_FILE} ${TEMPLATE_FILE} > ${OUTPUT_DIR}/${SERVICE_NAME}.${suffix}
 
 #  为onex-apiserver.service添加kubeconfig
 if [[ "${TEMPLATE_FILE}" =~ .*systemd.tmpl.service ]] && [[ "${SERVICE_NAME}" =~ *server ]];then
   escaped_config_dir="$(sed -e 's/[\/&]/\\&/g' <<< "${CONFIG_DIR}")"
-  echo "Adding kubeconfig to ${escaped_config_dir} service"
+  # shellcheck disable=SC2002
   sed -i "/ExecStart=/s/$/ --kubeconfig=${escaped_config_dir}\/config/" ${OUTPUT_DIR}/${SERVICE_NAME}.${suffix}
 fi

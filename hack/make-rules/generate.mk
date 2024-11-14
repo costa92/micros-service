@@ -2,6 +2,10 @@
 # Makefile helper functions for generate necessary files
 #
 
+#  ==============================================================================
+#  定义生成文件的规则
+SERVICES ?= $(filter-out tools,$(foreach service,$(wildcard ${ROOT_DIR}/cmd/*),$(notdir ${service})))
+
 # Generate go source files from protobuf files.
 .PHONY: gen.protoc
 gen.protoc: ## Generate go source files from protobuf files.
