@@ -24,6 +24,7 @@ ROOT_OUTPUT_SUBPATH="${ROOT_OUTPUT_SUBPATH:-_output}"
 ROOT_OUTPUT="${ROOT_DIR}/${ROOT_OUTPUT_SUBPATH}"
 
 source "${ROOT_DIR}/hack/lib/util.sh"
+source "${ROOT_DIR}/hack/lib/golang.sh"
 source "${ROOT_DIR}/hack/lib/logging.sh"
 
 

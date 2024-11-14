@@ -25,6 +25,11 @@ gen.protoc: ## Generate go source files from protobuf files.
 		--openapiv2_opt=json_names_for_fields=false \
 		$(shell find $(APIROOT) -name *.proto)
 
+## Generate all files.
+.PHONY: gen.appdocs
+gen.appdocs: ## Update generated application docs.
+	@${SCRIPTS_DIR}/update-generated-docs.sh
+
 
 ##@ gen.system
 .PHONY: gen.systemd
