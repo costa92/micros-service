@@ -42,3 +42,12 @@ _install.swagger:
 .PHONY: _install.yq
 _install.yq:
 	@$(GO) install github.com/mikefarah/yq/v4@$(YQ_VERSION)
+
+
+.PHONY: _install.go-apidiff
+_install.go-apidiff: ## Install go-apidiff.
+	@$(GO) install github.com/joelanford/go-apidiff@$(GO_APIDIFF_VERSION)
+
+.PHONY: _install.wire
+_install.wire: ## Install wire.
+	@$(GO) install github.com/google/wire/cmd/wire@$(WIRE_VERSION)

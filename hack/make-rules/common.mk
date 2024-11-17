@@ -131,6 +131,14 @@ else
 endif
 
 
+# Helper function to get dependency version from go.mod
+get_go_version = $(shell go list -m $1 | awk '{print $$2}')
+define go_install
+$(info ===========> Installing $(1)@$(2))
+$(GO) install $(1)@$(2)
+endef
+
+
 # Image build releated variables.
 REGISTRY_PREFIX ?= ccr.ccs.tencentyun.com/project
 GENERATED_DOCKERFILE_DIR=$(ROOT_DIR)/build/docker

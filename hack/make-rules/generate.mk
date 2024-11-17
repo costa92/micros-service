@@ -63,3 +63,8 @@ gen.appconfig.%: ## Generate specified application configuration file.
 ifeq ($(V),1)
 	@echo "DBG: Generating $(SERVICE) application configuration file at $(GENERATED_SERVICE_DIR)/$(SERVICE)"
 endif
+
+
+.PHONY: go.generate
+go.generate: tools.verify.wire ## Run `go generate ./...` command.
+	@$(GO) generate $(ROOT_DIR)/...

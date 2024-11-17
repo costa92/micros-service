@@ -76,6 +76,11 @@ serve-swagger: ## Serve swagger spec and docs at 65534.
 
 
 
+
+.PHONY: apidiff
+apidiff: tools.verify.go-apidiff ## Run the go-apidiff to verify any API differences compared with origin/master.
+	@go-apidiff master --compare-imports --print-compatible --repo-path=.
+
 ##@ targets 
 .PHONY: targets
 targets: Makefile ## Show all Sub-makefile targets.
