@@ -15,6 +15,7 @@ include $(ROOT_DIR)/hack/make-rules/common-versions.mk
 
 APIROOT := $(ROOT_DIR)/pkg/api
 MANIFESTS_DIR=$(ROOT_DIR)/manifests
+MANIFESTS_ENV_DIR=$(MANIFESTS_DIR)/env
 SCRIPTS_DIR=$(ROOT_DIR)/hack
 
 # It's necessary to set this because some environments don't link sh -> bash.

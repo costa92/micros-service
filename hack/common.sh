@@ -38,8 +38,8 @@ IFS=" " read -r -a DOCKER <<< "docker ${DOCKER_OPTS}"
 # The variable SERVER_SIDE_COMPONENTS is used to define onex server-side components.
 # These components need to installed as a service.
 declare -Ax SERVER_SIDE_COMPONENTS=(
-  ["pay"]="pay-server"
-  ["order"]="order-server"
+  ["pay"]="payserver"
+  ["order"]="orderserver"
 )
 
 

@@ -45,7 +45,7 @@ Documentation=https://github.com/costa92/micros-service/blob/master/manifests/in
 
 [Service]
 WorkingDirectory=${INSTALL_DIR}
-ExecStartPre=/usr/bin/mkdir -p ${DATA_DIR}/onex-apiserver
+ExecStartPre=/usr/bin/mkdir -p ${DATA_DIR}/apiserver
 ExecStartPre=/usr/bin/mkdir -p ${LOG_DIR}
 ExecStart=/opt/project/bin/apiserver --bind-address=${ONEX_APISERVER_BIND_ADDRESS} --secure-port ${ONEX_APISERVER_SECURE_PORT} --etcd-servers ${ONEX_APISERVER_ETCD_SERVERS} --client-ca-file=${ONEX_APISERVER_CLIENT_CA_FILE} --tls-cert-file=${ONEX_APISERVER_TLS_CERT_FILE} --tls-private-key-file=${ONEX_APISERVER_TLS_PRIVATE_KEY_FILE} --v=${ONEX_APISERVER_V_LEVEL}
 Restart=always
