@@ -9,6 +9,7 @@ import (
 	"github.com/costa92/micros-service/internal/orderserver/server"
 	"github.com/costa92/micros-service/internal/orderserver/service" // Add this import
 	"github.com/costa92/micros-service/internal/pkg/bootstrap"       // Add this import
+	"github.com/costa92/micros-service/internal/pkg/metrics"         // Add this import
 	"github.com/costa92/micros-service/pkg/db"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/google/wire"
@@ -21,6 +22,7 @@ func wireApp(
 ) (*kratos.App, func(), error) {
 	wire.Build(
 		bootstrap.ProviderSet,
+		metrics.ProviderSet,
 		server.ProviderSet,
 		service.ProviderSet,
 	)

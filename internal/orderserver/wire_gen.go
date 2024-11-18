@@ -10,6 +10,7 @@ import (
 	"github.com/costa92/micros-service/internal/orderserver/server"
 	"github.com/costa92/micros-service/internal/orderserver/service"
 	"github.com/costa92/micros-service/internal/pkg/bootstrap"
+	"github.com/costa92/micros-service/internal/pkg/metrics"
 	"github.com/costa92/micros-service/pkg/db"
 	"github.com/go-kratos/kratos/v2"
 )
@@ -22,8 +23,12 @@ func wireApp(appInfo bootstrap.AppInfo, config *server.Config, mySQLOptions *db.
 		Info:   appInfo,
 		Logger: logger,
 	}
-	orderService := service.NewOrderService()
-	v := server.NewMiddlewares(logger)
+	metricsMetrics, err := metrics.InitMetrics(appInfo)
+	if err != nil {
+		return nil, nil, err
+	}
+	orderService := service.NewOrderService(metricsMetrics)
+	v := server.NewMiddlewares(logger, metricsMetrics)
 	httpServer := server.NewHTTPServer(config, orderService, v)
 	grpcServer := server.NewGRPCServer(config, orderService, v)
 	v2 := server.NewServers(httpServer, grpcServer)
