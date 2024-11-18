@@ -4,9 +4,10 @@ import (
 	"context"
 
 	service "github.com/costa92/micros-service/internal/orderserver/service"
-
 	"github.com/costa92/micros-service/internal/pkg/pprof"
 	v1 "github.com/costa92/micros-service/pkg/api/orderserver/v1"
+	kratos_middleware "github.com/costa92/micros-service/pkg/middleware/kratos"
+
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/middleware/selector"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -59,6 +60,7 @@ func NewHTTPServer(c *Config, gw *service.OrderService, middlewares []middleware
 		opts = append(opts, http.TLSConfig(c.TLS.MustTLSConfig()))
 	}
 
+	opts = append(opts, kratos_middleware.ResponseEncoder())
 	// Create and return the server instance.
 	srv := http.NewServer(opts...)
 	h := openapiv2.NewHandler()
