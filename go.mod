@@ -192,7 +192,6 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241007155032-5fefd90f89a9 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/gorm v1.25.12
-	k8s.io/cri-client v0.31.2
 )
 
 replace (
@@ -206,6 +205,7 @@ replace (
 	k8s.io/component-helpers => k8s.io/component-helpers v0.31.2
 	k8s.io/controller-manager => k8s.io/controller-manager v0.31.2
 	k8s.io/cri-api => k8s.io/cri-api v0.31.2
+	k8s.io/cri-client => k8s.io/cri-client v0.31.2
 	k8s.io/csi-translation-lib => k8s.io/csi-translation-lib v0.31.2
 	k8s.io/dynamic-resource-allocation => k8s.io/dynamic-resource-allocation v0.31.2
 	k8s.io/endpointslice => k8s.io/endpointslice v0.31.2
@@ -223,6 +223,4 @@ replace (
 	k8s.io/mount-utils => k8s.io/mount-utils v0.31.2
 	k8s.io/pod-security-admission => k8s.io/pod-security-admission v0.31.2
 	k8s.io/sample-apiserver => k8s.io/sample-apiserver v0.31.2
-	k8s.io/cri-client => 		k8s.io/cri-client v0.31.2
-	k8s.io/cri-api => k8s.io/cri-api v0.31.2
 )
