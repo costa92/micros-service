@@ -7,6 +7,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/metrics"
 	"github.com/google/wire"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/prometheus"
 	"go.opentelemetry.io/otel/metric"
 	sdkmetric "go.opentelemetry.io/otel/sdk/metric"
@@ -18,6 +19,13 @@ type Metrics struct {
 	MetricRequests metric.Int64Counter
 	MetricSeconds  metric.Float64Histogram
 	Meter          metric.Meter
+	AppInfo        *bootstrap.AppInfo
+}
+
+func NewMetrics(appInfo *bootstrap.AppInfo) *Metrics {
+	return &Metrics{
+		AppInfo: appInfo,
+	}
 }
 
 func InitMetrics(appInfo bootstrap.AppInfo) (*Metrics, error) {
@@ -48,11 +56,19 @@ func InitMetrics(appInfo bootstrap.AppInfo) (*Metrics, error) {
 }
 
 // IncrementOrderCount increments the order count metric.
-func (m *Metrics) IncrementOrderCount(ctx context.Context) error {
-	counter, err := m.Meter.Int64Counter("req_order_count", metric.WithUnit("1"), metric.WithDescription("order count"))
-	if err != nil {
-		return err
-	}
+func (m *Metrics) IncrementOrderCount(ctx context.Context) {
+	counter, _ := m.Meter.Int64Counter("req_order_count", metric.WithUnit("1"), metric.WithDescription("order count"))
 	counter.Add(ctx, 1)
-	return nil
+}
+
+// IncrementLabelOrderCount increments the order count metric with a label.
+func (m *Metrics) IncrementLabelOrderCount(ctx context.Context, key, value string) {
+	counter, _ := m.Meter.Int64Counter("req_order_count", metric.WithUnit("1"), metric.WithDescription("order count"))
+	counter.Add(ctx, 1, metric.WithAttributes(attribute.String(key, value)))
+}
+
+// RecordOrderCount records the order count metric.
+func (m *Metrics) RecordOrderCount(ctx context.Context, value int64) {
+	counter, _ := m.Meter.Int64Counter("req_order_count", metric.WithUnit("1"), metric.WithDescription("order count"))
+	counter.Add(ctx, value)
 }

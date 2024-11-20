@@ -11,8 +11,6 @@ import (
 	servermetrics "github.com/costa92/micros-service/internal/pkg/metrics"
 	v1 "github.com/costa92/micros-service/pkg/api/orderserver/v1"
 	"github.com/google/wire"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/metric"
 )
 
 // ProviderSet is a set of service providers, used for dependency injection.
@@ -38,11 +36,8 @@ func (s *OrderService) Detail(ctx context.Context, req *v1.DetailRequest) (*v1.D
 		return nil, v1.ErrorOrderNotFound("order not found")
 	}
 
-	counter, _ := s.OptMetrics.Meter.Int64Counter("order_id", metric.WithUnit("1"), metric.WithDescription("order id"))
-
-	// Increment the counter.
-	counter.Add(ctx, 1, metric.WithAttributes(attribute.String("foo", "bar")))
-	counter.Add(ctx, 10, metric.WithAttributes(attribute.String("hello", "world")))
+	s.OptMetrics.IncrementLabelOrderCount(ctx, "order_id", req.OrderId)
+	s.OptMetrics.IncrementOrderCount(ctx)
 
 	if req.OrderId == "22" {
 		return nil, v1.ErrorOrderAlreadyExists("order already exists")
