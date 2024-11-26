@@ -26,4 +26,7 @@ enum ErrorReason {
 
   // 订单状态已经支付，无法再次支付
   OrderStatusPaid = 4 [(errors.code) = 400];
+
+  // 数据库服务错误
+  DatabaseError = 5 [(errors.code) = 500];
 }

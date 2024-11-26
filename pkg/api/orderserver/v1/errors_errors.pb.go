@@ -80,3 +80,17 @@ func IsOrderStatusPaid(err error) bool {
 func ErrorOrderStatusPaid(format string, args ...interface{}) *errors.Error {
 	return errors.New(400, ErrorReason_OrderStatusPaid.String(), fmt.Sprintf(format, args...))
 }
+
+// 数据库服务错误
+func IsDatabaseError(err error) bool {
+	if err == nil {
+		return false
+	}
+	e := errors.FromError(err)
+	return e.Reason == ErrorReason_DatabaseError.String() && e.Code == 500
+}
+
+// 数据库服务错误
+func ErrorDatabaseError(format string, args ...interface{}) *errors.Error {
+	return errors.New(500, ErrorReason_DatabaseError.String(), fmt.Sprintf(format, args...))
+}

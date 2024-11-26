@@ -9,3 +9,10 @@ http:
 
 grpc:
   addr: ${ORDER_SERVER_GRPC_ADDR} # gRPC 服务监听地址
+
+mysql:
+  host: ${MYSQL_ADDR} # 数据库主机地址
+  database: ${MYSQL_DATABASE} # 数据库名称
+  username: ${MYSQL_USERNAME} # 数据库用户名
+  password: ${MYSQL_PASSWORD} # 数据库密码
+  log-level: ${MYSQL_LOG_LEVEL} # 数据库日志级别，1 为最低，4 为最高

@@ -7,8 +7,10 @@
 package orderserver
 
 import (
+	"github.com/costa92/micros-service/internal/orderserver/biz"
 	"github.com/costa92/micros-service/internal/orderserver/server"
 	"github.com/costa92/micros-service/internal/orderserver/service"
+	"github.com/costa92/micros-service/internal/orderserver/store"
 	"github.com/costa92/micros-service/internal/pkg/bootstrap"
 	"github.com/costa92/micros-service/internal/pkg/metrics"
 	"github.com/costa92/micros-service/pkg/db"
@@ -27,7 +29,13 @@ func wireApp(appInfo bootstrap.AppInfo, config *server.Config, mySQLOptions *db.
 	if err != nil {
 		return nil, nil, err
 	}
-	orderService := service.NewOrderService(metricsMetrics)
+	gormDB, err := db.NewMySQL(mySQLOptions)
+	if err != nil {
+		return nil, nil, err
+	}
+	datastore := store.NewStore(gormDB)
+	iBiz := biz.NewBiz(datastore)
+	orderService := service.NewOrderService(metricsMetrics, iBiz)
 	v := server.NewMiddlewares(logger, metricsMetrics)
 	httpServer := server.NewHTTPServer(config, orderService, v)
 	grpcServer := server.NewGRPCServer(config, orderService, v)

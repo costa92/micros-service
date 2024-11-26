@@ -29,6 +29,8 @@ type transactionKey struct{}
 type IStore interface {
 	DB(ctx context.Context) *gorm.DB
 	TX(context.Context, func(ctx context.Context) error) error
+
+	Orders() OrderStore
 }
 
 // datastore is an implementation of IStore that provides methods
@@ -79,4 +81,8 @@ func (ds *datastore) TX(ctx context.Context, fn func(ctx context.Context) error)
 			return fn(ctx)
 		},
 	)
+}
+
+func (ds *datastore) Orders() OrderStore {
+	return NewOrderStore(ds)
 }

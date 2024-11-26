@@ -7,10 +7,13 @@ package service
 
 import (
 	"context"
+	"errors"
 
+	"github.com/costa92/micros-service/internal/orderserver/biz"
 	servermetrics "github.com/costa92/micros-service/internal/pkg/metrics"
 	v1 "github.com/costa92/micros-service/pkg/api/orderserver/v1"
 	"github.com/google/wire"
+	"gorm.io/gorm"
 )
 
 // ProviderSet is a set of service providers, used for dependency injection.
@@ -19,11 +22,13 @@ var ProviderSet = wire.NewSet(NewOrderService)
 type OrderService struct {
 	v1.UnimplementedOrderServerServer
 	OptMetrics *servermetrics.Metrics
+	biz        biz.IBiz // A factory for creating business logic components.
 }
 
-func NewOrderService(optMetrics *servermetrics.Metrics) *OrderService {
+func NewOrderService(optMetrics *servermetrics.Metrics, biz biz.IBiz) *OrderService {
 	return &OrderService{
 		OptMetrics: optMetrics,
+		biz:        biz,
 	}
 }
 
@@ -32,16 +37,17 @@ func (s *OrderService) CreateOrder(ctx context.Context, req *v1.CreateOrderReque
 }
 
 func (s *OrderService) Detail(ctx context.Context, req *v1.DetailRequest) (*v1.DetailResponse, error) {
-	if req.OrderId == "11" {
+	s.OptMetrics.IncrementLabelOrderCount(ctx, "order_id", req.OrderId)
+	s.OptMetrics.IncrementOrderCount(ctx)
+	order, err := s.biz.Orders().GetOrder(ctx, req)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, v1.ErrorDatabaseError("database error")
+	}
+
+	if order == nil {
 		return nil, v1.ErrorOrderNotFound("order not found")
 	}
 
-	s.OptMetrics.IncrementLabelOrderCount(ctx, "order_id", req.OrderId)
-	s.OptMetrics.IncrementOrderCount(ctx)
-
-	if req.OrderId == "22" {
-		return nil, v1.ErrorOrderAlreadyExists("order already exists")
-	}
 	return &v1.DetailResponse{
 		OrderId: req.OrderId,
 	}, nil
