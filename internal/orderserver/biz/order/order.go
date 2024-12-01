@@ -2,6 +2,7 @@ package order
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/costa92/micros-service/internal/orderserver/model"
 	"github.com/costa92/micros-service/internal/orderserver/store"
@@ -9,34 +10,49 @@ import (
 	"github.com/costa92/micros-service/pkg/store/where"
 )
 
+// IOrderBiz defines the order business interface
 type IOrderBiz interface {
-	CreateOrder(ctx context.Context, obj *model.Order) error
-
+	CreateOrder(ctx context.Context, order *model.Order) error
 	GetOrder(ctx context.Context, req *v1.DetailRequest) (*model.Order, error)
+	UpdateOrderStatus(ctx context.Context, orderID string, status model.OrderStatus) error
 }
 
 type orderBiz struct {
 	ds store.IStore
 }
 
-var _ IOrderBiz = (*orderBiz)(nil)
-
+// NewOrderBiz creates a new order business instance
 func NewOrderBiz(store store.IStore) IOrderBiz {
 	return &orderBiz{
 		ds: store,
 	}
 }
 
-func (b *orderBiz) CreateOrder(ctx context.Context, obj *model.Order) error {
-	return nil
+// CreateOrder creates a new order
+func (b *orderBiz) CreateOrder(ctx context.Context, order *model.Order) error {
+	if !order.IsValidStatus() {
+		return fmt.Errorf("invalid order status: %s", order.OrderStatus)
+	}
+	
+	return b.ds.Orders().Create(ctx, order)
 }
 
-// GetOrder retrieves an order by its ID.
+// GetOrder retrieves an order by its ID
 func (b *orderBiz) GetOrder(ctx context.Context, req *v1.DetailRequest) (*model.Order, error) {
 	whr := where.T(ctx).F("order_id", req.OrderId)
-	order, err := b.ds.Orders().Get(ctx, whr)
-	if err != nil {
-		return nil, err
+	return b.ds.Orders().Get(ctx, whr)
+}
+
+// UpdateOrderStatus updates the order status
+func (b *orderBiz) UpdateOrderStatus(ctx context.Context, orderID string, status model.OrderStatus) error {
+	order := &model.Order{
+		OrderStatus: status,
 	}
-	return order, nil
+	
+	if !order.IsValidStatus() {
+		return fmt.Errorf("invalid order status: %s", status)
+	}
+
+	whr := where.T(ctx).F("order_id", orderID)
+	return b.ds.Orders().Update(ctx, order, whr)
 }

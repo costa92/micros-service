@@ -195,7 +195,7 @@ require (
 require (
 	github.com/go-kratos/aegis v0.2.0 // indirect
 	github.com/go-playground/form/v4 v4.2.1 // indirect
-	github.com/google/uuid v1.6.0 // indirect
+	github.com/google/uuid v1.6.0
 	github.com/gorilla/mux v1.8.1
 	github.com/redis/go-redis/v9 v9.7.0
 	golang.org/x/sys v0.27.0 // indirect
